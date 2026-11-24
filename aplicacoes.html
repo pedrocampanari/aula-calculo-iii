@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplicações · Integrais em ação · Cálculo III</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+/* tema dark rock do site; estrutura original preservada
+   VOICE everyday study, clear and exact
+   IDEA a lab bench: each application is one instrument with a live readout and an Antes/Depois knob
+   PICTURE a large animated canvas per application, driven by its slider
+   COLOUR preto de palco, vermelho para "depois", cinza para "antes", âmbar para alvos e para o número-chave
+   TYPE Anton para títulos, Archivo para texto, JetBrains Mono para leituras
+   LAYOUT text + readouts left, instrument right; stacked as title, instrument, controls, text below 760px */
+:root{color-scheme:dark;--bg:#09090a;--ink:#eee8dc;--mute:#9a9389;--line:#2a2a30;--panel:#121214;--before:#7d776d;--after:#ff2d2d;--warm:#ffb000;--hot:#ffb000}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);overflow-x:clip}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+header.band{padding-bottom:12px}
+h1{font:400 clamp(44px,7.5vw,96px)/.9 var(--f-head);text-transform:uppercase;margin:0 0 16px;text-wrap:balance}
+h1 .out{color:transparent;-webkit-text-stroke:2px var(--after)}
+.lead{max-width:68ch;color:var(--mute);margin:0}
+nav.sec{position:relative;z-index:5;background:rgba(9,9,10,.94);border-bottom:1px solid var(--line)}
+nav.sec .scroll{display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px);max-width:1240px;margin:0 auto}
+nav.sec a{flex:none;color:var(--ink);text-decoration:none;font:700 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;border:1px solid var(--line)}
+nav.sec a:hover,nav.sec a:focus-visible{border-color:var(--after);color:var(--after)}
+@media(min-width:900px){nav.sec{position:sticky;top:61px}}
+section.band{border-bottom:1px solid var(--line)}
+section:nth-of-type(even){background:var(--panel)}
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-rows:auto 1fr;grid-template-areas:"h i" "b i";column-gap:clamp(20px,3vw,44px);align-items:start}
+.head{grid-area:h}
+.body{grid-area:b}
+.inst{grid-area:i}
+h2{font:400 clamp(28px,3.6vw,44px)/1 var(--f-head);text-transform:uppercase;letter-spacing:.01em;margin:0 0 14px;text-wrap:balance}
+.tag{font:700 12.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--after);margin:0 0 8px}
+p{margin:0 0 12px;max-width:62ch}
+.ab{display:grid;gap:8px;margin:14px 0}
+.ab div{padding-left:12px;border-left:3px solid var(--before)}
+.ab div+div{border-left-color:var(--after)}
+.ab b{display:block;font-size:14px}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:10px;margin-top:16px}
+.read div{border:1px solid var(--line);padding:10px 12px;background:var(--bg)}
+.read span{display:block;font:600 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.read strong{font-family:var(--f-mono);font-size:clamp(15px,1.7vw,19px);font-variant-numeric:tabular-nums;white-space:nowrap}
+.read .key{background:var(--hot);border-color:var(--hot);color:#101418}
+.read .key span{color:#3b3520}
+.read .key strong{color:#000}
+.fig{position:relative;min-height:360px;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 40%,#16161a 0,#0b0b0d 70%);overflow:hidden;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.fig canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctl{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;margin-top:12px}
+.ctl label{font:700 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.ctl label:first-child{color:var(--mute)}
+.ctl label:nth-child(3){color:var(--after)}
+input[type=range]{width:100%;height:44px;accent-color:var(--after);cursor:pointer;margin:0}
+.ctl button{font:700 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;min-height:44px;padding:0 16px;border:2px solid var(--warm);background:transparent;color:var(--warm);cursor:pointer}
+.ctl button:hover{background:var(--warm);color:#000}
+.ctl button[aria-pressed=true]{background:var(--after);border-color:var(--after);color:#000}
+button:focus-visible,input:focus-visible,nav.sec a:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+.f{font-size:14px;color:var(--mute);margin-top:8px}
+footer.band{color:var(--mute);font-size:14px;border-top:3px solid var(--after)}
+@media(max-width:760px){.grid{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"h" "i" "b"}.inst{margin-bottom:20px}.fig{min-height:310px}.ctl{grid-template-columns:auto minmax(0,1fr) auto}.ctl button{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="logo" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>Cálculo <span>III</span></a>
+  <nav class="tabs" aria-label="Páginas">
+    <a href="index.html"><span>Teoria</span></a>
+    <a href="exercicios-cilindricas.html"><span>Exercícios · Cilíndricas</span></a>
+    <a href="exercicios-triplas.html"><span>Exercícios · Integrais triplas</span></a>
+    <a href="aplicacoes.html" aria-current="page"><span>Aplicações</span></a>
+  </nav>
+</div></header>
+<header class="band"><div class="wrap">
+<p class="tag">Encore · Engenharia de Computação</p>
+<h1>Integrais <span class="out">em ação</span></h1>
+<p class="lead">Sete aplicações, cada uma com uma animação. Arraste o controle de <b>Antes</b> para <b>Depois</b> e veja o que muda quando a integral tripla (ou a conversão para coordenadas cilíndricas) entra na conta. O botão Animar faz a varredura sozinho.</p>
+</div></header>
+<nav class="sec" aria-label="Seções"><div class="scroll">
+<a href="#fisica">Física de jogos</a><a href="#robo">Robótica</a><a href="#lidar">LiDAR</a><a href="#torno">Gráficos 3D</a><a href="#calor">Hardware</a><a href="#drone">Probabilidade</a><a href="#monte-carlo">Monte Carlo</a>
+</div></nav>
+
+<section class="band" id="fisica"><div class="wrap grid">
+<div class="head">
+<p class="tag">1 · Motores de física</p>
+<h2>Com a inércia certa, o barril rola em vez de escorregar</h2>
+</div>
+<div class="body">
+<p>A engine calcula o momento de inércia com uma integral tripla em cilíndricas. Parte da energia vira rotação, e o barril desce mais devagar.</p>
+<p>A aceleração na rampa é a = g·sen α / (1 + k), com I = k·M·a².</p>
+<div class="ab"><div><b>Antes</b>Sem inércia (k = 0): o objeto escorrega como um bloco, rápido demais.</div><div><b>Depois</b>Cilindro maciço (k = ½, de I = ½Ma²): rola e chega com 2/3 da aceleração.</div></div>
+<div class="read"><div class="key"><span>Fator k</span><strong data-o="fisica-k">0</strong></div><div><span>Aceleração</span><strong data-o="fisica-a">–</strong></div><div><span>Descida de 3 m</span><strong data-o="fisica-t">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-fisica" aria-label="Barril descendo uma rampa"></canvas></div>
+<div class="ctl"><label for="s-fisica">Antes</label><input id="s-fisica" type="range" min="0" max="100" value="100"><label for="s-fisica">Depois</label><button id="p-fisica" aria-pressed="false">Animar</button></div>
+<p class="f">Contorno tracejado: o objeto "antes", sempre sem inércia, para comparar.</p></div>
+</div></section>
+
+<section class="band" id="robo"><div class="wrap grid">
+<div class="head">
+<p class="tag">2 · Robótica (URDF / ROS)</p>
+<h2>Com a inércia certa no URDF, o braço para no alvo sem tremer</h2>
+</div>
+<div class="body">
+<p>O controlador usa a inércia declarada para calcular o torque. Se ela foi subestimada, o torque sai fraco demais para frear e o braço passa do ponto, oscilando.</p>
+<p>A vista de cima mostra um robô cilíndrico: a garra fica em (r, θ, z), e o anel é o espaço de trabalho, um cilindro vazado.</p>
+<div class="ab"><div><b>Antes</b>Inércia declarada = 8% da real: amortecimento ζ ≈ 0,28 e pico de 40%.</div><div><b>Depois</b>Inércia correta (vinda da integral): ζ = 1, chega sem ultrapassar.</div></div>
+<div class="read"><div class="key"><span>Ultrapassagem</span><strong data-o="robo-os">–</strong></div><div><span>Amortecimento ζ</span><strong data-o="robo-z">–</strong></div><div><span>Garra (x; y)</span><strong data-o="robo-xy">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-robo" aria-label="Braço robótico girando até o alvo"></canvas></div>
+<div class="ctl"><label for="s-robo">Antes</label><input id="s-robo" type="range" min="0" max="100" value="100"><label for="s-robo">Depois</label><button id="p-robo" aria-pressed="false">Animar</button></div>
+<p class="f">Linha âmbar: ângulo-alvo. Cinza: braço "antes". Vermelho: braço com o ajuste atual.</p></div>
+</div></section>
+
+<section class="band" id="lidar"><div class="wrap grid">
+<div class="head">
+<p class="tag">3 · Sensores LiDAR</p>
+<h2>O LiDAR mede em (r, θ); a conversão vira o mapa da sala</h2>
+</div>
+<div class="body">
+<p>Cada leitura é uma distância r num ângulo θ. Na forma crua, os pontos formam uma "imagem cilíndrica", que é o formato usado por redes neurais de segmentação.</p>
+<p>Ao aplicar x = r·cos θ e y = r·sin θ, cada ponto vai para o seu lugar e a sala aparece.</p>
+<div class="ab"><div><b>Antes</b>Dados crus: θ no eixo horizontal, r no vertical.</div><div><b>Depois</b>Nuvem de pontos em cartesianas: paredes e obstáculos visíveis.</div></div>
+<div class="read"><div class="key"><span>Representação</span><strong data-o="lidar-modo">–</strong></div><div><span>Leituras por volta</span><strong data-o="lidar-n">540</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-lidar" aria-label="Pontos do LiDAR migrando de coordenadas polares para cartesianas"></canvas></div>
+<div class="ctl"><label for="s-lidar">Antes</label><input id="s-lidar" type="range" min="0" max="100" value="0"><label for="s-lidar">Depois</label><button id="p-lidar" aria-pressed="false">Animar</button></div>
+<p class="f">Os pontos mais fortes são os que o feixe acabou de varrer. Cena simulada.</p></div>
+</div></section>
+
+<section class="band" id="torno"><div class="wrap grid">
+<div class="head">
+<p class="tag">4 · Computação gráfica (torno / revolve)</p>
+<h2>Girar um perfil por 2π gera um sólido de revolução</h2>
+</div>
+<div class="body">
+<p>A ferramenta Lathe do Blender, ou Revolve do CAD, gira uma curva r(z) em torno do eixo. É o mundo das cilíndricas: o volume varrido até o ângulo Φ é</p>
+<p><b>V(Φ) = ∫₀^Φ ∫₀² ∫₀^r(z) r dr dz dθ = (Φ/2)·∫₀² r(z)² dz</b></p>
+<div class="ab"><div><b>Antes</b>Φ = 0: só o perfil 2D, sem volume.</div><div><b>Depois</b>Φ = 2π: o vaso completo, V = π·∫ r² dz.</div></div>
+<div class="read"><div class="key"><span>Volume varrido</span><strong data-o="torno-v">–</strong></div><div><span>Ângulo Φ</span><strong data-o="torno-phi">–</strong></div><div><span>Do sólido total</span><strong data-o="torno-pct">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-torno" aria-label="Perfil girando em torno do eixo e formando um vaso"></canvas></div>
+<div class="ctl"><label for="s-torno">Antes</label><input id="s-torno" type="range" min="0" max="100" value="60"><label for="s-torno">Depois</label><button id="p-torno" aria-pressed="false">Animar</button></div>
+<p class="f">Branco: perfil inicial (θ = 0). Âmbar: borda que está varrendo. Unidades arbitrárias.</p></div>
+</div></section>
+
+<section class="band" id="calor"><div class="wrap grid">
+<div class="head">
+<p class="tag">5 · Hardware (heat pipe)</p>
+<h2>O calor sai do centro do tubo e o total armazenado cai</h2>
+</div>
+<div class="body">
+<p>A seção do heat pipe é um disco, então a equação do calor é resolvida em r: ∂T/∂t = α(T'' + T'/r). O calor guardado é a integral tripla Q = ∭ ρc(T − T<sub>amb</sub>) dV, e em cilíndricas o dV vira r dr dθ dz.</p>
+<div class="ab"><div><b>Antes</b>Logo após um pico de carga: núcleo a 85 °C.</div><div><b>Depois</b>A parede a 25 °C retirou a maior parte do calor.</div></div>
+<div class="read"><div class="key"><span>Calor restante</span><strong data-o="calor-q">–</strong></div><div><span>Temperatura no centro</span><strong data-o="calor-tc">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-calor" aria-label="Disco com o calor se espalhando do centro para a borda"></canvas></div>
+<div class="ctl"><label for="s-calor">Antes</label><input id="s-calor" type="range" min="0" max="100" value="0"><label for="s-calor">Depois</label><button id="p-calor" aria-pressed="false">Animar</button></div>
+<p class="f">Aqui o controle é o tempo. Gráfico: perfil T(r); o tracejado é o estado inicial. Simulação por diferenças finitas.</p></div>
+</div></section>
+
+<section class="band" id="drone"><div class="wrap grid">
+<div class="head">
+<p class="tag">6 · Probabilidade e localização</p>
+<h2>Depois do filtro de Kalman, a chance de o drone estar na zona sobe</h2>
+</div>
+<div class="body">
+<p>A posição do drone é incerta: cada ponto é uma hipótese. A zona permitida é um cilindro (r ≤ 1 m, 0 ≤ z ≤ 3 m), e a probabilidade é a integral tripla da densidade nesse cilindro, calculada em coordenadas cilíndricas.</p>
+<p><b>P = ∫₀^2π ∫₀¹ ∫₀³ f(r cos θ, r sin θ, z) · r dz dr dθ</b></p>
+<div class="ab"><div><b>Antes</b>Só o GPS: desvio de 1,3 m, nuvem espalhada.</div><div><b>Depois</b>Com o filtro: desvio de 0,22 m, nuvem concentrada.</div></div>
+<div class="read"><div class="key"><span>P(dentro da zona)</span><strong data-o="drone-p">–</strong></div><div><span>Desvio σ</span><strong data-o="drone-sig">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-drone" aria-label="Nuvem de posições prováveis de um drone sobre uma zona circular"></canvas></div>
+<div class="ctl"><label for="s-drone">Antes</label><input id="s-drone" type="range" min="0" max="100" value="0"><label for="s-drone">Depois</label><button id="p-drone" aria-pressed="false">Animar</button></div>
+<p class="f">Vista de cima. Círculos âmbar: 1σ e 2σ em torno da estimativa. Vermelho: hipóteses dentro da zona.</p></div>
+</div></section>
+
+<section class="band" id="monte-carlo"><div class="wrap grid">
+<div class="head">
+<p class="tag">7 · Métodos numéricos</p>
+<h2>Com mais pontos, o Monte Carlo acerta o volume da casquinha</h2>
+</div>
+<div class="body">
+<p>Pontos aleatórios são sorteados na caixa [−1, 1] × [−1, 1] × [0, 1], de volume 4. A fração que cai acima do cone e dentro da esfera, vezes 4, estima o volume. O erro cai como 1/√N.</p>
+<p>O gráfico usa r = √(x² + y²) no eixo horizontal: em cilíndricas, a casquinha 3D vira uma fatia 2D.</p>
+<div class="ab"><div><b>Antes</b>10 pontos: estimativa grosseira.</div><div><b>Depois</b>30 mil pontos: perto do exato, π(2 − √2)/3 ≈ 0,613.</div></div>
+<div class="read"><div class="key"><span>Estimativa</span><strong data-o="mc-est">–</strong></div><div><span>Pontos N</span><strong data-o="mc-n">–</strong></div><div><span>Erro</span><strong data-o="mc-err">–</strong></div></div>
+</div>
+<div class="inst"><div class="fig"><canvas id="c-monte-carlo" aria-label="Pontos aleatórios estimando o volume de uma casquinha"></canvas></div>
+<div class="ctl"><label for="s-monte-carlo">Antes</label><input id="s-monte-carlo" type="range" min="0" max="100" value="45"><label for="s-monte-carlo">Depois</label><button id="p-monte-carlo" aria-pressed="false">Animar</button></div>
+<p class="f">À direita: estimativa conforme N cresce (escala log); o tracejado é o valor exato.</p></div>
+</div></section>
+
+<footer class="band"><div class="wrap">Volte para a <a href="index.html">teoria</a> ou treine com as listas de <a href="exercicios-cilindricas.html">coordenadas cilíndricas</a> e <a href="exercicios-triplas.html">integrais triplas</a>. Cenas e dados são simulados para fins didáticos.</div></footer>
+
+<script>
+{
+const TAU=Math.PI*2;
+const fmt=(v,d=2)=>v.toFixed(d).replace('.',',');
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?2*t*t:1-((-2*t+2)**2)/2;
+const rng=seed=>{let s=seed;return()=>(s=s*16807%2147483647)/2147483647};
+const erf=x=>{const t=1/(1+.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-(x*x));return x>=0?y:-y};
+const probes={};
+for(const k of ['ink','mute','line','panel','before','after','warm','bg']){const e=document.createElement('i');e.style.cssText='color:var(--'+k+');position:absolute;width:0;height:0;overflow:hidden';document.body.appendChild(e);probes[k]=e}
+let C={};
+const readC=()=>{for(const k in probes)C[k]=getComputedStyle(probes[k]).color};
+readC();
+const themeObs=new MutationObserver(readC);
+themeObs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class','style']});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readC);
+const circle=(c,x,y,r)=>{c.beginPath();c.arc(x,y,r,0,TAU)};
+const text=(c,s,x,y,al='left',col=C.mute)=>{c.fillStyle=col;c.textAlign=al;c.font='600 12.5px "JetBrains Mono", ui-monospace, monospace';c.fillText(s,x,y)};
+const cmap=v=>{const st=[[43,76,155],[79,163,199],[242,225,91],[242,138,46],[200,32,47]];v=Math.max(0,Math.min(1,v))*(st.length-1);const i=Math.min(st.length-2,Math.floor(v)),f=v-i;const a=st[i],b=st[i+1];return 'rgb('+a.map((x,j)=>Math.round(lerp(x,b[j],f))).join(',')+')'};
+const heatQ=arr=>{let q=0;const n=arr.length;for(let i=0;i<n;i++)q+=(arr[i]-25)*(i+.5)/n;return q};
+
+const sims={
+fisica:{mode:'ping',init(st){st.ph=0},draw(c,W,H,T,dt,s,st){
+  const m=24,x0=m,y0=Math.max(44,H*.2),x1=W-m,y1=H-34;
+  const dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),al=Math.atan2(dy,dx),ux=dx/L,uy=dy/L,nx=uy,ny=-ux;
+  const R=Math.max(12,Math.min(30,L*.06));
+  c.fillStyle=C.panel;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.lineTo(x0,y1);c.closePath();c.fill();
+  c.strokeStyle=C.ink;c.lineWidth=2;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();
+  const g=9.8,Lm=3,k=.5*s,a0=g*Math.sin(al),a=a0/(1+k),Tk=Math.sqrt(2*Lm/a);
+  st.ph+=dt;if(st.ph>Tk+1.2)st.ph=0;
+  const frac=acc=>Math.min(1,.5*acc*st.ph*st.ph/Lm);
+  const place=f=>{const d=R+f*(L-2.5*R);return[x0+ux*d+nx*R,y0+uy*d+ny*R,d]};
+  const [gx,gy]=place(frac(a0));
+  c.setLineDash([5,4]);c.strokeStyle=C.before;c.lineWidth=2;circle(c,gx,gy,R);c.stroke();c.setLineDash([]);
+  const [bx,by,bd]=place(frac(a));
+  c.fillStyle=C.after;circle(c,bx,by,R);c.fill();
+  const rot=s>.001?bd/R:0;c.strokeStyle=C.bg;c.lineWidth=2.5;
+  for(let j=0;j<3;j++){const an=rot+j*Math.PI/3;c.beginPath();c.moveTo(bx-Math.cos(an)*R*.8,by-Math.sin(an)*R*.8);c.lineTo(bx+Math.cos(an)*R*.8,by+Math.sin(an)*R*.8);c.stroke()}
+  if(Math.hypot(gx-bx,gy-by)>2*R+4||s<.02)text(c,'antes',gx,gy-R-8,'center');
+  if(s>.02)text(c,'depois',bx,by-R-8,'center',C.after);
+  text(c,'rampa de '+Math.round(al*180/Math.PI)+'°',x1,y1+22,'right');
+  return{k:fmt(k),a:fmt(a)+' m/s²',t:fmt(Tk)+' s'}}},
+
+robo:{mode:'ping',init(st){st.A={th:0,w:0};st.B={th:0,w:0};st.h=[];st.tt=0},draw(c,W,H,T,dt,s,st){
+  const r=.08+.92*s,Kp=16,Kd=8;
+  const step=(S,rr,tg,h)=>{const acc=rr*(Kp*(tg-S.th)-Kd*S.w);S.w+=acc*h;S.th+=S.w*h};
+  st.tt+=dt;const tg=(Math.floor(st.tt/3.5)%2?1:-1);
+  for(let i=0;i<10;i++){step(st.A,.08,tg,dt/10);step(st.B,r,tg,dt/10)}
+  st.h.push([st.tt,st.A.th,st.B.th,tg]);while(st.h.length&&st.tt-st.h[0][0]>7)st.h.shift();
+  const wide=W>=560;let vw,vh,px,py,pw,ph;
+  if(wide){vw=Math.min(H,W*.45);vh=H;px=vw+30;py=18;pw=W-px-16;ph=H-50}else{vw=W;vh=H*.56;px=20;py=vh+6;pw=W-36;ph=H-vh-30}
+  const cx=vw/2,cy=vh/2,Rmax=Math.min(vw,vh)*.42,Rmin=Rmax*.38;
+  c.fillStyle=C.after;c.globalAlpha=.1;c.beginPath();c.arc(cx,cy,Rmax,0,TAU);c.arc(cx,cy,Rmin,0,TAU,true);c.fill();c.globalAlpha=1;
+  c.strokeStyle=C.line;c.lineWidth=1;circle(c,cx,cy,Rmax);c.stroke();circle(c,cx,cy,Rmin);c.stroke();
+  c.setLineDash([6,5]);c.strokeStyle=C.warm;c.lineWidth=2;c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(tg)*Rmax*1.05,cy-Math.sin(tg)*Rmax*1.05);c.stroke();c.setLineDash([]);
+  const arm=(th,col,lw,al)=>{c.globalAlpha=al;c.strokeStyle=col;c.fillStyle=col;c.lineWidth=lw;c.lineCap='round';const ex=cx+Math.cos(th)*Rmax*.86,ey=cy-Math.sin(th)*Rmax*.86;c.beginPath();c.moveTo(cx,cy);c.lineTo(ex,ey);c.stroke();circle(c,ex,ey,lw*.85);c.fill();c.globalAlpha=1};
+  arm(st.A.th,C.before,6,.75);arm(st.B.th,C.after,10,1);
+  c.fillStyle=C.ink;circle(c,cx,cy,Rmin*.35);c.fill();
+  c.strokeStyle=C.line;c.lineWidth=1;c.strokeRect(px,py,pw,ph);
+  const Y=v=>py+ph/2-v/1.75*(ph/2),X=t=>px+pw*(1-(st.tt-t)/7);
+  c.beginPath();c.moveTo(px,Y(0));c.lineTo(px+pw,Y(0));c.stroke();
+  const line=(idx,col,lw,dash)=>{c.setLineDash(dash);c.strokeStyle=col;c.lineWidth=lw;c.beginPath();st.h.forEach((p,i)=>{const x=X(p[0]),y=Y(Math.max(-1.75,Math.min(1.75,p[idx])));i?c.lineTo(x,y):c.moveTo(x,y)});c.stroke();c.setLineDash([])};
+  line(3,C.warm,2,[6,5]);line(1,C.before,2,[]);line(2,C.after,2.5,[]);
+  text(c,'θ(t)',px+6,py+16);text(c,'últimos 7 s',px+pw-6,py+ph+18,'right');
+  const z=Math.sqrt(r),OS=z<.999?100*Math.exp(-Math.PI*z/Math.sqrt(1-z*z)):0;
+  return{os:fmt(OS,0)+'%',z:fmt(z),xy:'('+fmt(.6*Math.cos(st.B.th))+'; '+fmt(.6*Math.sin(st.B.th))+') m'}}},
+
+lidar:{mode:'ping',init(st){
+  const N=540,box=[-4,5,-3,3.5],obs=[[2,1.5,.6],[-2,-1.2,.8],[3,-1.8,.5],[-1.5,2,.4],[.8,-.9,.3]];st.p=[];let rmax=0;
+  for(let i=0;i<N;i++){const th=i/N*TAU,dx=Math.cos(th),dy=Math.sin(th);let t=1e9;
+    if(dx>1e-9)t=Math.min(t,box[1]/dx);if(dx<-1e-9)t=Math.min(t,box[0]/dx);if(dy>1e-9)t=Math.min(t,box[3]/dy);if(dy<-1e-9)t=Math.min(t,box[2]/dy);
+    for(const[ox,oy,ro]of obs){const b=dx*ox+dy*oy,q=ox*ox+oy*oy-ro*ro,d=b*b-q;if(d>0){const tt=b-Math.sqrt(d);if(tt>0)t=Math.min(t,tt)}}
+    st.p.push([th,t]);rmax=Math.max(rmax,t)}
+  st.rmax=rmax;st.box=box;st.obs=obs},draw(c,W,H,T,dt,s,st){
+  const m=34,e=ease(s),sc=Math.min((W-2*m)/9,(H-2*m)/6.5),N=st.p.length;
+  const A=(th,r)=>[m+th/TAU*(W-2*m),H-m-r/st.rmax*(H-2*m)];
+  const Bxy=(x,y)=>[W/2+(x-.5)*sc,H/2-(y-.25)*sc];
+  const phi=(T*1.3)%TAU;
+  if(e<.98){c.globalAlpha=1-e;c.strokeStyle=C.ink;c.lineWidth=1.5;c.beginPath();c.moveTo(m,m-10);c.lineTo(m,H-m);c.lineTo(W-m,H-m);c.stroke();
+    text(c,'θ: 0 → 2π',W-m,H-m+20,'right');text(c,'r',m-14,m);
+    c.strokeStyle=C.warm;c.lineWidth=2;const sx=A(phi,0)[0];c.beginPath();c.moveTo(sx,m);c.lineTo(sx,H-m);c.stroke();c.globalAlpha=1}
+  if(e>.02){c.globalAlpha=.35*e;c.strokeStyle=C.mute;c.lineWidth=1.5;const[a1,b1]=Bxy(st.box[0],st.box[3]),[a2,b2]=Bxy(st.box[1],st.box[2]);c.strokeRect(a1,b1,a2-a1,b2-b1);
+    for(const[ox,oy,ro]of st.obs){const[qx,qy]=Bxy(ox,oy);circle(c,qx,qy,ro*sc);c.stroke()}
+    c.globalAlpha=e;const[sx,sy]=Bxy(0,0);const pr=st.p[Math.floor(phi/TAU*N)%N][1];const[ex,ey]=Bxy(pr*Math.cos(phi),pr*Math.sin(phi));
+    c.strokeStyle=C.warm;c.lineWidth=2;c.beginPath();c.moveTo(sx,sy);c.lineTo(ex,ey);c.stroke();c.fillStyle=C.ink;circle(c,sx,sy,6);c.fill();
+    text(c,'x',W-m,H-12,'right');text(c,'y',12,m);c.globalAlpha=1}
+  c.fillStyle=C.after;
+  for(const[th,r]of st.p){const[ax,ay]=A(th,r),[bx,by]=Bxy(r*Math.cos(th),r*Math.sin(th));const age=(((phi-th)%TAU)+TAU)%TAU/TAU;const sz=age<.05?3.4:2.2;c.globalAlpha=.25+.75*(1-age);c.fillRect(lerp(ax,bx,e)-sz/2,lerp(ay,by,e)-sz/2,sz,sz)}
+  c.globalAlpha=1;
+  return{modo:e<.5?'polar (θ, r)':'cartesiana (x, y)'}}},
+
+torno:{mode:'ping',init(st){st.f=z=>.5+.28*Math.sin(2.4*z-.9)+.1*z;let I=0;const n=400;for(let i=0;i<n;i++){const z=(i+.5)/n*2;I+=st.f(z)**2*(2/n)}st.I=I},draw(c,W,H,T,dt,s,st){
+  const Phi=s*TAU,el=.38,rot=T*.35,ce=Math.cos(el),se=Math.sin(el);
+  const sc=Math.min((H-50)/(2*ce+2*se),(W-40)/2.3),base=H/2+sc*ce;
+  const P=(r,f,z)=>{const x=r*Math.cos(f+rot),y=r*Math.sin(f+rot);return[W/2+sc*x,base-sc*z*ce+sc*y*se]};
+  c.setLineDash([4,5]);c.strokeStyle=C.mute;c.lineWidth=1;c.beginPath();let q=P(0,0,-.15);c.moveTo(q[0],q[1]);q=P(0,0,2.25);c.lineTo(q[0],q[1]);c.stroke();c.setLineDash([]);
+  const mer=(f,col,lw,al)=>{c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=lw;c.beginPath();for(let i=0;i<=40;i++){const z=i/20,p=P(st.f(z),f,z);i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])}c.stroke();c.globalAlpha=1};
+  for(let f=Math.PI/12;f<Phi-1e-6;f+=Math.PI/12)mer(f,C.after,1,.5);
+  if(Phi>.01){const n=Math.max(2,Math.ceil(Phi/(Math.PI/30)));c.strokeStyle=C.after;c.lineWidth=1;c.globalAlpha=.5;
+    for(let k=0;k<=16;k++){const z=k/8,r=st.f(z);c.beginPath();for(let i=0;i<=n;i++){const p=P(r,Phi*i/n,z);i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])}c.stroke()}c.globalAlpha=1}
+  mer(0,C.ink,3,1);if(Phi>.01)mer(Phi,C.warm,3,1);
+  return{v:fmt(Phi/2*st.I),phi:Math.round(Phi*180/Math.PI)+'°',pct:Math.round(s*100)+'%'}}},
+
+calor:{mode:'loop',init(st){
+  const N=48,dr=1/N,dt=dr*dr/5,Tmax=.3,steps=Math.ceil(Tmax/dt),every=steps/100;
+  const Tt=new Float64Array(N),nT=new Float64Array(N);for(let i=0;i<N;i++)Tt[i]=(i+.5)*dr<.35?85:25;
+  st.S=[Array.from(Tt)];let next=every;
+  for(let k=1;k<=steps;k++){for(let i=0;i<N;i++){const ri=(i+.5)*dr,rm=i*dr,rp=(i+1)*dr,Tl=i>0?Tt[i-1]:Tt[i],Tr=i<N-1?Tt[i+1]:50-Tt[i];nT[i]=Tt[i]+dt/(ri*dr*dr)*(rp*(Tr-Tt[i])-rm*(Tt[i]-Tl))}Tt.set(nT);if(k>=next&&st.S.length<=100){st.S.push(Array.from(Tt));next+=every}}
+  while(st.S.length<101)st.S.push(Array.from(Tt));st.N=N;st.Q0=heatQ(st.S[0])},draw(c,W,H,T,dt,s,st){
+  const v=s*100,i0=Math.min(99,Math.floor(v)),f=v-i0,N=st.N,pr=st.S[i0].map((x,i)=>lerp(x,st.S[i0+1][i],f));
+  const wide=W>=560;let Rd,cx,cy,px,py,pw,ph;
+  if(wide){Rd=Math.min(H-40,W*.42)/2;cx=20+Rd;cy=H/2;px=cx+Rd+56;py=20;pw=W-px-18;ph=H-58}else{Rd=Math.min(W-40,H*.5)/2;cx=W/2;cy=Rd+14;px=46;py=2*Rd+42;pw=W-64;ph=H-py-30}
+  for(let i=N-1;i>=0;i--){c.fillStyle=cmap((pr[i]-25)/60);circle(c,cx,cy,(i+1)/N*Rd);c.fill()}
+  c.strokeStyle=C.ink;c.lineWidth=3;circle(c,cx,cy,Rd);c.stroke();
+  c.strokeStyle=C.line;c.lineWidth=1;c.strokeRect(px,py,pw,ph);
+  const X=r=>px+r*pw,Y=t=>py+ph-(t-20)/70*ph;
+  const prof=(arr,col,lw,dash)=>{c.setLineDash(dash);c.strokeStyle=col;c.lineWidth=lw;c.beginPath();arr.forEach((t,i)=>{const x=X((i+.5)/N),y=Y(t);i?c.lineTo(x,y):c.moveTo(x,y)});c.stroke();c.setLineDash([])};
+  prof(st.S[0],C.before,2,[5,4]);prof(pr,C.warm,3,[]);
+  text(c,'85',px-6,Y(85)+4,'right');text(c,'25',px-6,Y(25)+4,'right');text(c,'T (°C)',px+6,py+16);text(c,'r: centro → parede',px+pw,py+ph+18,'right');
+  return{q:Math.round(100*heatQ(pr)/st.Q0)+'%',tc:Math.round(pr[0])+' °C'}}},
+
+drone:{mode:'ping',init(st){const R=rng(7);const g=()=>{const u=R(),v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v)};st.p=[];for(let i=0;i<700;i++)st.p.push([g(),g(),R()*TAU]);st.ls=-1;st.P=0},draw(c,W,H,T,dt,s,st){
+  const sg=lerp(1.3,.22,s),mu=[.35,.15],sc=Math.min(W,H)/6.6,ox=W/2,oy=H/2,X=x=>ox+x*sc,Y=y=>oy-y*sc;
+  c.strokeStyle=C.line;c.lineWidth=1;for(let k=-6;k<=6;k++){c.beginPath();c.moveTo(X(k),0);c.lineTo(X(k),H);c.stroke();c.beginPath();c.moveTo(0,Y(k));c.lineTo(W,Y(k));c.stroke()}
+  c.fillStyle=C.after;c.globalAlpha=.1;circle(c,X(0),Y(0),sc);c.fill();c.globalAlpha=1;c.strokeStyle=C.after;c.lineWidth=2;circle(c,X(0),Y(0),sc);c.stroke();
+  for(const p of st.p){const x=mu[0]+sg*(p[0]+.06*Math.sin(T*1.7+p[2])),y=mu[1]+sg*(p[1]+.06*Math.cos(T*1.3+p[2]));c.fillStyle=x*x+y*y<=1?C.after:C.before;c.globalAlpha=.8;c.fillRect(X(x)-1.2,Y(y)-1.2,2.4,2.4)}
+  c.globalAlpha=1;c.setLineDash([5,4]);c.strokeStyle=C.warm;c.lineWidth=2;circle(c,X(mu[0]),Y(mu[1]),sg*sc);c.stroke();circle(c,X(mu[0]),Y(mu[1]),2*sg*sc);c.stroke();c.setLineDash([]);
+  const dx=X(mu[0]),dy=Y(mu[1]);c.strokeStyle=C.ink;c.lineWidth=2.5;c.beginPath();c.moveTo(dx-9,dy-9);c.lineTo(dx+9,dy+9);c.moveTo(dx+9,dy-9);c.lineTo(dx-9,dy+9);c.stroke();
+  for(const[a,b]of[[-1,-1],[1,-1],[1,1],[-1,1]]){c.lineWidth=1.5;circle(c,dx+a*10,dy+b*10,5);c.stroke()}
+  text(c,'zona: r ≤ 1 m',X(0),Y(1)-10,'center',C.after);
+  if(Math.abs(sg-st.ls)>1e-4){st.ls=sg;let S=0;const nr=48,nt=96,drr=1/nr,dth=TAU/nt;for(let i=0;i<nr;i++){const r=(i+.5)*drr;for(let j=0;j<nt;j++){const th=(j+.5)*dth,x=r*Math.cos(th)-mu[0],y=r*Math.sin(th)-mu[1];S+=Math.exp(-(x*x+y*y)/(2*sg*sg))*r}}st.P=S*drr*dth/(TAU*sg*sg)*erf(1.5/(sg*Math.SQRT2))}
+  return{sig:fmt(sg)+' m',p:fmt(100*st.P,1)+'%'}}},
+
+'monte-carlo':{mode:'ping',init(st){const R=rng(11),M=30000;st.M=M;st.pts=new Float32Array(M*2);st.cum=new Uint32Array(M);let k=0;for(let i=0;i<M;i++){const x=R()*2-1,y=R()*2-1,z=R(),r=Math.hypot(x,y);if(z>=r&&r*r+z*z<=1)k++;st.pts[2*i]=r;st.pts[2*i+1]=z;st.cum[i]=k}st.n=0;st.ex=Math.PI*(2-Math.SQRT2)/3},draw(c,W,H,T,dt,s,st){
+  const lM=Math.log10(st.M),N=Math.round(10**(1+(lM-1)*s));
+  if(st.n>N)st.n=N;else st.n=Math.min(N,st.n+Math.max(1,N*dt*.9));const n=Math.max(1,Math.floor(st.n));
+  const wide=W>=560;let sx,sy,sw,sh,qx,qy,qw,qh;
+  if(wide){sx=40;sy=16;sw=W*.55-56;sh=H-52;qx=W*.55+34;qy=16;qw=W-qx-16;qh=H-52}else{sx=40;sy=14;sw=W-56;sh=H*.5-30;qx=40;qy=H*.5+10;qw=W-56;qh=H*.5-40}
+  const k=Math.min(sw/1.45,sh),ox=sx,oy=sy+k,sz=n>8000?1.2:n>1500?1.8:2.6;
+  for(const pass of[0,1]){c.fillStyle=pass?C.after:C.before;c.globalAlpha=pass?.9:.45;for(let i=0;i<n;i++){const r=st.pts[2*i],z=st.pts[2*i+1],ins=z>=r&&r*r+z*z<=1;if(ins==pass)c.fillRect(ox+k*r-sz/2,oy-k*z-sz/2,sz,sz)}}
+  c.globalAlpha=1;c.strokeStyle=C.ink;c.lineWidth=2;c.beginPath();c.moveTo(ox,oy);c.lineTo(ox+k*Math.SQRT1_2,oy-k*Math.SQRT1_2);c.arc(ox,oy,k,-Math.PI/4,-Math.PI/2,true);c.closePath();c.stroke();
+  c.strokeStyle=C.line;c.lineWidth=1;c.beginPath();c.moveTo(ox,sy);c.lineTo(ox,oy);c.lineTo(ox+k*1.45,oy);c.stroke();
+  text(c,'r = √(x² + y²)',ox+k*1.45,oy+18,'right');text(c,'z',ox-14,sy+12);
+  c.strokeRect(qx,qy,qw,qh);const QX=v=>qx+(Math.log10(v)-1)/(lM-1)*qw,QY=v=>qy+qh-(Math.max(.2,Math.min(1,v))-.2)/.8*qh;
+  c.setLineDash([6,5]);c.strokeStyle=C.warm;c.lineWidth=2;c.beginPath();c.moveTo(qx,QY(st.ex));c.lineTo(qx+qw,QY(st.ex));c.stroke();c.setLineDash([]);
+  c.strokeStyle=C.after;c.lineWidth=2;c.beginPath();let first=true;for(let j=0;j<=150;j++){const nn=Math.round(10**(1+j/150*(lM-1)));if(nn>n)break;const y=QY(4*st.cum[nn-1]/nn);first?c.moveTo(QX(nn),y):c.lineTo(QX(nn),y);first=false}c.stroke();
+  const est=4*st.cum[n-1]/n;c.fillStyle=C.after;circle(c,QX(n),QY(est),5);c.fill();
+  text(c,'exato 0,613',qx+qw-6,QY(st.ex)-8,'right',C.warm);text(c,'N (log)',qx+qw,qy+qh+18,'right');text(c,'estimativa',qx+6,qy+16);
+  return{n:n.toLocaleString('pt-BR'),est:fmt(est,3),err:fmt(Math.abs(est-st.ex)/st.ex*100,1)+'%'}}}
+};
+
+const items=[];
+for(const id in sims){
+  const cv=document.getElementById('c-'+id),rg=document.getElementById('s-'+id),bt=document.getElementById('p-'+id);
+  if(!cv)continue;
+  const pre=id==='monte-carlo'?'mc':id;
+  const outs={};document.querySelectorAll('[data-o^="'+pre+'-"]').forEach(e=>{outs[e.dataset.o.slice(pre.length+1)]=e});
+  const it={id,sim:sims[id],cv,ctx:cv.getContext('2d'),rg,bt,outs,st:{},play:false,pt:0,vis:true,s:rg.value/100};
+  it.sim.init(it.st);
+  rg.addEventListener('input',()=>{it.s=rg.value/100;if(it.play){it.play=false;bt.setAttribute('aria-pressed','false');bt.textContent='Animar'}});
+  bt.addEventListener('click',()=>{it.play=!it.play;bt.setAttribute('aria-pressed',String(it.play));bt.textContent=it.play?'Pausar':'Animar';if(it.play){it.pt=it.sim.mode==='loop'?it.s*6:Math.acos(1-2*it.s)/TAU*6}});
+  items.push(it);
+}
+const visObs=new IntersectionObserver(es=>{for(const e of es){const it=items.find(i=>i.cv===e.target);if(it)it.vis=e.isIntersecting}},{rootMargin:'100px'});
+items.forEach(i=>visObs.observe(i.cv));
+let last=performance.now(),TT=0;
+const frame=now=>{
+  const dt=Math.min(.05,(now-last)/1000);last=now;TT+=dt;
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  for(const it of items){
+    if(!it.vis)continue;
+    if(it.play){it.pt+=dt;it.s=it.sim.mode==='loop'?(it.pt/6)%1:.5-.5*Math.cos(TAU*it.pt/6);it.rg.value=Math.round(it.s*100)}
+    const w=it.cv.clientWidth,h=it.cv.clientHeight;if(!w||!h)continue;
+    if(it.cv.width!==Math.round(w*dpr)||it.cv.height!==Math.round(h*dpr)){it.cv.width=Math.round(w*dpr);it.cv.height=Math.round(h*dpr)}
+    const c=it.ctx;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);c.globalAlpha=1;c.setLineDash([]);
+    const o=it.sim.draw(c,w,h,TT,dt,it.s,it.st)||{};
+    for(const k in o){const e=it.outs[k];if(e&&e.textContent!==o[k])e.textContent=o[k]}
+  }
+  requestAnimationFrame(frame);
+};
+requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

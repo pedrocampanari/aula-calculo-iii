@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercícios · Integrais triplas · Cálculo III</title>
+<meta name="description" content="Lista de exercícios de integrais triplas com gabarito comentado e animado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="logo" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>Cálculo <span>III</span></a>
+  <nav class="tabs" aria-label="Páginas">
+    <a href="index.html"><span>Teoria</span></a>
+    <a href="exercicios-cilindricas.html"><span>Exercícios · Cilíndricas</span></a>
+    <a href="exercicios-triplas.html" aria-current="page"><span>Exercícios · Integrais triplas</span></a>
+    <a href="aplicacoes.html"><span>Aplicações</span></a>
+  </nav>
+</div></header>
+
+<main>
+<section class="page-hero"><div class="in">
+  <p class="kicker">Lista 2 · 13 faixas</p>
+  <h1>Integrais <span class="out">triplas</span></h1>
+  <p>Treze exercícios: caixas, tetraedros, cilíndricas, esféricas, mudança de ordem e Jacobiano. Responda, confira e abra o <b>gabarito animado</b>: cada passo da resolução muda o que a animação mostra.</p>
+  <p class="dica">Lembrete: limites de fora são números; em cilíndricas $dV = r\,dz\,dr\,d\theta$; em esféricas $dV = \rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$.</p>
+</div></section>
+<div class="ex-bar"><div class="in">
+  <button class="vbtn" data-filtro="todos" aria-pressed="true" type="button">Todos</button>
+  <button class="vbtn" data-filtro="iniciante" type="button">Iniciante</button>
+  <button class="vbtn" data-filtro="intermediario" type="button">Intermediário</button>
+  <button class="vbtn" data-filtro="avancado" type="button">Avançado</button>
+  <div class="vu" id="vu" aria-hidden="true"></div><span class="vu-t" id="vu-t" aria-live="polite"></span>
+  <button class="vbtn" id="zerar" type="button" title="Apagar o progresso salvo neste navegador">Zerar</button>
+</div></div>
+<div class="lista" id="lista"></div>
+</main>
+
+<footer class="foot"><div class="in">
+  <div><b>Cálculo III ao vivo</b><br>Seu progresso fica salvo só neste navegador.</div>
+  <div class="next" style="margin:0">
+    <a class="vbtn" href="index.html" style="display:inline-flex;align-items:center;text-decoration:none">← Teoria</a>
+    <a class="vbtn" href="exercicios-cilindricas.html" style="display:inline-flex;align-items:center;text-decoration:none">Lista 1</a>
+    <a class="vbtn" href="exercicios-triplas.html" style="display:inline-flex;align-items:center;text-decoration:none">Lista 2</a>
+    <a class="vbtn amp" href="aplicacoes.html" style="display:inline-flex;align-items:center;text-decoration:none">Aplicações →</a>
+  </div>
+</div></footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="assets/viz.js"></script>
+<script defer src="assets/dados-triplas.js"></script>
+<script defer src="assets/exercicios.js"></script>
+<script defer src="assets/math.js"></script>
+</body>
+</html>

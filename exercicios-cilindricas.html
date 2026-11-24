@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercícios · Coordenadas cilíndricas · Cálculo III</title>
+<meta name="description" content="Lista de exercícios de coordenadas cilíndricas com gabarito comentado e animado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="logo" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>Cálculo <span>III</span></a>
+  <nav class="tabs" aria-label="Páginas">
+    <a href="index.html"><span>Teoria</span></a>
+    <a href="exercicios-cilindricas.html" aria-current="page"><span>Exercícios · Cilíndricas</span></a>
+    <a href="exercicios-triplas.html"><span>Exercícios · Integrais triplas</span></a>
+    <a href="aplicacoes.html"><span>Aplicações</span></a>
+  </nav>
+</div></header>
+
+<main>
+<section class="page-hero"><div class="in">
+  <p class="kicker">Lista 1 · 19 faixas</p>
+  <h1>Coordenadas <span class="out">cilíndricas</span></h1>
+  <p>Dezenove exercícios, do aquecimento ao avançado. Em cada um: tente responder, clique em <b>Conferir</b> e depois abra o <b>gabarito animado</b>. Ele vem passo a passo, e a animação ao lado acompanha cada passo.</p>
+  <p class="dica">Fórmulas de referência: $x = r\cos\theta$, $y = r\sin\theta$, $z = z$, $r^2 = x^2+y^2$, $\tan\theta = \frac{y}{x}$, $dV = r\,dz\,dr\,d\theta$. Convenção: $r \ge 0$ e $0 \le \theta < 2\pi$.</p>
+</div></section>
+<div class="ex-bar"><div class="in">
+  <button class="vbtn" data-filtro="todos" aria-pressed="true" type="button">Todos</button>
+  <button class="vbtn" data-filtro="iniciante" type="button">Iniciante</button>
+  <button class="vbtn" data-filtro="intermediario" type="button">Intermediário</button>
+  <button class="vbtn" data-filtro="avancado" type="button">Avançado</button>
+  <div class="vu" id="vu" aria-hidden="true"></div><span class="vu-t" id="vu-t" aria-live="polite"></span>
+  <button class="vbtn" id="zerar" type="button" title="Apagar o progresso salvo neste navegador">Zerar</button>
+</div></div>
+<div class="lista" id="lista"></div>
+</main>
+
+<footer class="foot"><div class="in">
+  <div><b>Cálculo III ao vivo</b><br>Seu progresso fica salvo só neste navegador.</div>
+  <div class="next" style="margin:0">
+    <a class="vbtn" href="index.html" style="display:inline-flex;align-items:center;text-decoration:none">← Teoria</a>
+    <a class="vbtn" href="exercicios-cilindricas.html" style="display:inline-flex;align-items:center;text-decoration:none">Lista 1</a>
+    <a class="vbtn" href="exercicios-triplas.html" style="display:inline-flex;align-items:center;text-decoration:none">Lista 2</a>
+    <a class="vbtn amp" href="aplicacoes.html" style="display:inline-flex;align-items:center;text-decoration:none">Aplicações →</a>
+  </div>
+</div></footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="assets/viz.js"></script>
+<script defer src="assets/dados-cilindricas.js"></script>
+<script defer src="assets/exercicios.js"></script>
+<script defer src="assets/math.js"></script>
+</body>
+</html>
